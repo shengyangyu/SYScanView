@@ -309,7 +309,9 @@ CGFloat const kSYFocalPointOfInterestY = 0.5;
     
     AVCaptureSession *newSession = [[AVCaptureSession alloc] init];
     AVCaptureDeviceInput *input = [self deviceInputForCaptureDevice:captureDevice];
-    
+    // 此方法应该放在设置精度前面
+    // 否则在iphone4上iOS7 会闪退
+    [newSession addInput:input];
     // 读取质量，质量越高，可读取小尺寸的二维码
     if ([newSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
         [newSession setSessionPreset:AVCaptureSessionPreset1920x1080];
@@ -320,7 +322,7 @@ CGFloat const kSYFocalPointOfInterestY = 0.5;
     else {
         [newSession setSessionPreset:AVCaptureSessionPresetPhoto];
     }
-    [newSession addInput:input];
+    
     
     AVCaptureMetadataOutput *captureOutput = [[AVCaptureMetadataOutput alloc] init];
     [captureOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
